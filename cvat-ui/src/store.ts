@@ -1,19 +1,15 @@
-import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
+import { createStore, applyMiddleware, Store } from 'redux';
 
-import rootReducer from './reducers/root-reducer';
+import createRootReducer from './reducers/root-reducer';
 
-export default function configureStore(initialState = {}) {
-  return createStore(
-    rootReducer,
-    initialState,
-    compose(
-      applyMiddleware(thunk),
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__
-        ?
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__({ trace: true })
-        :
-      (f: any) => f
-    )
-  );
+const middlewares = [
+    thunk,
+];
+
+export default function createCVATStore(): Store {
+    return createStore(
+        createRootReducer(),
+        applyMiddleware(...middlewares),
+    );
 }
